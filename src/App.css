@@ -3,6 +3,11 @@
     flex-wrap: wrap;
 }
 
+.flex {
+    display: flex;
+    flex-wrap: wrap;
+}
+
 .flex-container {
     display: flex;
     min-width: 29rem;
