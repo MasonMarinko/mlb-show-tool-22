@@ -8,6 +8,10 @@
     flex-wrap: wrap;
 }
 
+.sell-price {
+padding-left:2rem;
+}
+
 .flex-container {
     display: flex;
     min-width: 29rem;
@@ -17,9 +21,19 @@
     box-shadow: 0 10px 16px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%)
 }
 
+.form-styling {
+    width: 100%;
+    padding-bottom: 5rem;
+    text-align: center;
+}
+
 .flex-container:hover {
     transition: all 500ms ease-out;
     box-shadow: 0 30px 30px 0 rgb(0 0 0 / 20%), 0 30px 30px 0 rgb(0 0 0 / 19%)
+}
+
+.money-back {
+    font-size:10px;
 }
 
 
@@ -29,6 +43,151 @@
 
 .card-info {
     width: 100%;
-    align-self: center;
     text-align: center;
+}
+
+h2 {
+    margin-bottom:0;
+    padding-top: 1rem;
+}
+
+.stats-container {
+    width: 100%;
+    padding-top: 1rem;
+    padding-bottom: 3rem;
+    text-align: center;
+}
+    .stats-container h1 {
+        font-size: 50px;
+    }
+
+.breakEven {
+    margin-top: .5rem;
+}
+
+.breakEven-price {
+    margin-top: 0;
+}
+
+.making-container {
+    padding: 0;
+    margin: 0;
+    padding-top:1rem;
+    font-weight: bold;
+    font-size:30px;
+}
+
+.losing-container {
+    padding: 0;
+    margin: 0;
+    font-weight: bold;
+    font-size:30px;
+    color:red;
+}
+    .losing-container h3 {
+        color:black;
+        margin-bottom: 0;
+    }
+
+
+.making-container {
+    padding: 0;
+    margin: 0;
+    font-weight: bold;
+    font-size:30px;
+    color:green;
+}
+
+    .making-container h3 {
+        color:black;
+        margin-bottom: 0;
+    }
+
+.breakEven {
+    color: green;
+}
+
+.border-bottom {
+    border-bottom: 1px solid black;
+    margin: 0 600px 0 600px;
+}
+
+.underline {
+    text-decoration: underline;
+}
+
+.useful-title {
+    margin-bottom: 40px;
+}
+
+.making-container .breakEven {
+    padding-top: 2rem;
+    color: black;
+    max-height: 85px;
+}
+
+.entered-values-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+    .entered-values-container h3 {
+        margin-top: 0;
+        padding-right: 1rem;
+    }
+
+    .entered-values-container p {
+        align-items: center;
+        margin: 0;
+        padding-right:4rem;
+    }
+
+.entered-prices {
+} 
+
+.breakEven .breakEven-price {
+    color: green;
+    text-decoration: none;
+}
+
+.form-styling {
+    padding-top:20px;
+    padding-bottom: 8px;
+}
+
+.update-info-title {
+    padding-top: 75px;
+}
+
+.startOver-button {
+    margin-top: 2rem;
+}
+
+.parentheses-text {
+    font-size: 1.2rem;
+    margin-top: 0px;
+    color: black;
+    margin:0 0 5px 0;
+}
+
+.losing-header {
+    padding: 0;
+    margin: 0;
+    font-weight: bold;
+    font-size:30px;
+    color:red;
+}
+
+.making-header {
+    padding: 0;
+    margin: 0;
+    font-weight: bold;
+    font-size:30px;
+    color:green;
+}
+
+.bottom-border{
+    border-bottom: solid thin darkGray;
+    padding-top: 2rem;
 }
