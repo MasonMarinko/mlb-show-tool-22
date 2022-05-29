@@ -7,10 +7,23 @@ const App = () => {
   const [buyNowPrice, setBuyNowPrice] = useState({})
   const [sellNowPrice, setSellNowPrice] = useState({})
   const [form, setForm] = useState({});
-  const [updatedForm, setUpdatedForm] = useState({});
   const [areStatsOpen, setAreStatsOpen] = useState(false);
   const [isPurchased, setIsPurchased] = useState(false);
   const [isSold, setIsSold] = useState(false);
+  const [refreshTime, setRefreshTime] = useState({elapsedTime:null});
+
+  const startCounting = () => {
+    setInterval(countUp, 1000);
+  }
+
+  const countUp = () => {
+    setRefreshTime(({ elapsedTime }) => ({ elapsedTime: elapsedTime + 1 }))  }
+
+  useEffect(() => {
+    startCounting();
+  },[])
+
+  console.log(refreshTime.elapsedTime)
 
   const gainLossCards = (buyPrice, sellPrice) => {
     const commissionSellPrice = buyPrice - (buyPrice * .10)
@@ -147,8 +160,6 @@ axios.all([requestOne, requestTwo, requestThree, requestFour, requestFive, reque
 
   const onPostPurchaseSubmit = (e) => {
     e.preventDefault(e);
-    console.log("SELL NOW PRICE:",sellNowPrice["Final Sold Price"])
-    console.log("BUY NOW PRICE:",buyNowPrice["Final Purchased Price"])
     if (buyNowPrice["Final Purchased Price"] && !sellNowPrice["Final Sold Price"]) {
       setIsPurchased(true)
       setForm({
@@ -256,42 +267,30 @@ axios.all([requestOne, requestTwo, requestThree, requestFour, requestFive, reque
     }
   }
 
-  // const nextPrevButton = (e) => {
-  //   e.preventDefault()
-  //   if(e.target.innerText === "Previous Page") {
-  //     setPages(pages - 1)
-  //   } else {
-  //     setPages(pages + 1)
-  //   }
-  // }
-  // ["Buy Now Price:"]
-
   return (
     <div>
-      {/* <button className="previous-page" onClick={nextPrevButton}>
-        Previous Page
-        </button>
-      <button className="next-page" onClick={nextPrevButton}>
-        Next Page
-        </button> */}
       <div className = "flex">
+        <h1 className="main-title">Flip Calculator</h1>
         {!areStatsOpen && (
       <form className="form-styling" onSubmit={(e) => onSubmit(e)}>
-        <label className='buy-price'>
-          Buy Now Price
+        <label>
+          <span  className='input-labels'>Buy Now Price</span>
           <input onChange={e =>onFieldChange(e)} type="integer" name="Buy Now Price" />
         </label>
         <label className='sell-price'>
-          Sell Now Price
+          <span className='input-labels'>Sell Now Price</span>
           <input onChange={e =>onFieldChange(e)} type="integer" name="Sell Now Price" />
-          <input type="submit" value="Submit" />
+          <br/>
+          <br/>
+          <input className="submit-button" type="submit" value="Submit" />
           </label>
       </form>
         )}
       {areStatsOpen && (
         gainLossHeader(form["Buy Now Price"], form["Sell Now Price"])
       )}
-      <h1 className="main-title">MONEY MAKERS (Updated x seconds ago)</h1>
+      <h1 className="main-title">CARDS WITH OVER $1000 FLIP VALUE <span className="timer-data">(Results as of {refreshTime.elapsedTime} second/s ago)</span></h1>
+      <h2 className='secondary-title'>{refreshTime.elapsedTime >= 60 && "CARD DATA OVER 1 MINUTE OLD, PLEASE CONSIDER REFRESHING PAGE"}</h2>
     {profitOnly?.map((r,i) =>
       <div className='flex-container' key={i}>
         <img alt="baseball player card" className="card-image" src={r?.item.img}></img>
