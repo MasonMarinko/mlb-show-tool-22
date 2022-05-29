@@ -61,9 +61,6 @@ h2 {
         font-size: 50px;
     }
 
-.breakEven {
-    margin-top: .5rem;
-}
 
 .breakEven-price {
     margin-top: 0;
@@ -121,9 +118,18 @@ h2 {
 }
 
 .making-container .breakEven {
-    padding-top: 2rem;
     color: black;
-    max-height: 85px;
+}
+
+.main-title {
+    min-width: 100%;
+    display: flex;
+    justify-content: space-around;
+}
+
+.title-padding-top {
+    padding-top: 3rem;
+    margin: 0px;
 }
 
 .entered-values-container {

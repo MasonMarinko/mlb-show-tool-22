@@ -42,21 +42,65 @@ const App = () => {
 let one = "https://mlb22.theshow.com/apis/listings.json?&page=1"
 let two = "https://mlb22.theshow.com/apis/listings.json?&page=2"
 let three = "https://mlb22.theshow.com/apis/listings.json?&page=3"
+let four = "https://mlb22.theshow.com/apis/listings.json?&page=4"
+let five = "https://mlb22.theshow.com/apis/listings.json?&page=5"
+let six = "https://mlb22.theshow.com/apis/listings.json?&page=6"
+let seven = "https://mlb22.theshow.com/apis/listings.json?&page=7"
+let eight = "https://mlb22.theshow.com/apis/listings.json?&page=8"
+let nine = "https://mlb22.theshow.com/apis/listings.json?&page=9"
+let ten = "https://mlb22.theshow.com/apis/listings.json?&page=10"
+let eleven = "https://mlb22.theshow.com/apis/listings.json?&page=11"
+let twelve = "https://mlb22.theshow.com/apis/listings.json?&page=12"
+let thirteen = "https://mlb22.theshow.com/apis/listings.json?&page=13"
+let fourteen = "https://mlb22.theshow.com/apis/listings.json?&page=14"
  
 const requestOne = axios.get(one);
 const requestTwo = axios.get(two);
 const requestThree = axios.get(three);
+const requestFour = axios.get(four);
+const requestFive = axios.get(five);
+const requestSix = axios.get(six);
+const requestSeven = axios.get(seven);
+const requestEight = axios.get(eight);
+const requestNine = axios.get(nine);
+const requestTen = axios.get(ten);
+const requestEleven = axios.get(eleven);
+const requestTwelve = axios.get(twelve);
+const requestThirteen = axios.get(thirteen);
+const requestFourteen = axios.get(fourteen);
  
-axios.all([requestOne, requestTwo, requestThree]).then(axios.spread((...responses) => {
+axios.all([requestOne, requestTwo, requestThree, requestFour, requestFive, requestSix, requestSeven, requestEight, requestNine, requestTen, requestEleven, requestTwelve, requestThirteen, requestFourteen]).then(axios.spread((...responses) => {
   const responseOne = responses[0].data.listings
   const responseTwo = responses[1].data.listings
   const responseThree = responses[2].data.listings
-  setResData(responseOne.concat(responseTwo, responseThree))
+  const responseFour = responses[3].data.listings
+  const responseFive = responses[4].data.listings
+  const responseSix = responses[5].data.listings
+  const responseSeven = responses[6].data.listings
+  const responseEight = responses[7].data.listings
+  const responseNine = responses[8].data.listings
+  const responseTen = responses[9].data.listings
+  const responseEleven = responses[10].data.listings
+  const responseTwelve = responses[11].data.listings
+  const responseThirteen = responses[12].data.listings
+  const responseFourteen = responses[13].data.listings
+  setResData(responseOne.concat(responseTwo, responseThree, responseFour, responseFive, responseSix, responseSeven, responseEight, responseNine, responseTen, responseEleven, responseTwelve, responseThirteen, responseFourteen))
 })).catch(errors => {
   return errors;
 })
-  }, []);
-
+  }, []);  
+  
+  const profitOnly = (resData.filter((r) => {
+    const commissionSellPrice = r.best_sell_price - (r.best_sell_price * .10)
+    const buySellDifference = commissionSellPrice - r.best_buy_price
+    return buySellDifference > 1000 && r.best_buy_price !== 0
+  }).map(p=>{
+    const commissionSellPrice = p.best_sell_price - (p.best_sell_price * .10)
+    const buySellDifference = commissionSellPrice - p.best_buy_price
+    return ({...p, buySellDifference})
+  }).sort((a, b) => b.buySellDifference - a.buySellDifference)) 
+  
+  console.log(profitOnly)
 
   const onFieldChange = (e) => {
     if (e.target.name === "Buy Now Price") {
@@ -78,23 +122,16 @@ axios.all([requestOne, requestTwo, requestThree]).then(axios.spread((...response
       "Buy Now Price": buyNowPrice["Buy Now Price"],
       "Sell Now Price": sellNowPrice["Sell Now Price"]
     })
-    console.log(gainLossCards(form.buyPrice, form.sellPrice))
     setAreStatsOpen(true)
   }
 
-
-
-
-  // NEED TO FINISH ADDING LOGIC, User needs to be able to update the sold price, and the text will change based on that as well. Make sure to use ispurchased and issold to determine what text to display.
-
   const onPostPurchaseChange = (e) => {
-    console.log(e.target.name)
     if (e.target.name === "Final Purchased Price") {
       setBuyNowPrice({
         ...buyNowPrice,
         "Final Purchased Price": e.target.value
       })
-      setIsPurchased(true)
+
     } else {
       if (!e.target.value){
         return
@@ -103,7 +140,6 @@ axios.all([requestOne, requestTwo, requestThree]).then(axios.spread((...response
           ...sellNowPrice,
           [e.target.name]: e.target.value
         })
-        setIsPurchased(true)
       }
     }
   }
@@ -111,32 +147,28 @@ axios.all([requestOne, requestTwo, requestThree]).then(axios.spread((...response
 
   const onPostPurchaseSubmit = (e) => {
     e.preventDefault(e);
-    console.log(sellNowPrice)
-    if (sellNowPrice["Final Sold Price"] && buyNowPrice["Final Buy Price"] === undefined) {
-      setForm({
-        "Buy Now Price": buyNowPrice["Final Purchased Price"],
-        "Sell Now Price": sellNowPrice["Final Sold Price"]
-      })
-    } else {
+    console.log("SELL NOW PRICE:",sellNowPrice["Final Sold Price"])
+    console.log("BUY NOW PRICE:",buyNowPrice["Final Purchased Price"])
+    if (buyNowPrice["Final Purchased Price"] && !sellNowPrice["Final Sold Price"]) {
+      setIsPurchased(true)
       setForm({
         "Buy Now Price": buyNowPrice["Final Purchased Price"],
         "Sell Now Price": form["Sell Now Price"]
       })
-      
+    } else if (sellNowPrice["Final Sold Price"] && !buyNowPrice["Final Purchased Price"]) {
+      setIsSold(true)
+      setForm({
+        "Sell Now Price": sellNowPrice["Final Sold Price"],
+        "Buy Now Price": form["Buy Now Price"]
+      }) 
+    } else {
+      setIsPurchased(true)
+      setIsSold(true)
+      setForm({
+        "Buy Now Price": buyNowPrice["Final Purchased Price"],
+        "Sell Now Price": sellNowPrice["Final Sold Price"]
+      })
     }
-
-    console.log(buyNowPrice["Buy Now Price"])
-  //   if (buyNowPrice["Buy Now Price"] !== undefined || sellNowPrice["Sell Now Price"] !== undefined) {
-  //     setForm({
-  //       "Buy Now Price": buyNowPrice["Buy Now Price"],
-  //       "Sell Now Price": sellNowPrice["Sell Now Price"]
-  //     })
-  // } else {
-  //   setBuyNowPrice({
-  //     ...buyNowPrice,
-  //     [e.target.name]: e.target.value
-  //   })
-  // }
 }
 
   const startOver = (e) => {
@@ -153,13 +185,33 @@ axios.all([requestOne, requestTwo, requestThree]).then(axios.spread((...response
     if (Math.sign(buySellDifference) === -1) {
       return (
         <div className = "stats-container">
-           <h1 className='border-bottom'>Useful Information:</h1>
+           <h1 className='border-bottom useful-title'>Useful Information:</h1>
          <div className = "losing-container">
-         <h3>Money Lost (Based on buy/sell prices above)</h3>
+         <div className="entered-values-container">
+           <h3 className="underline">Buy Now Entered:</h3><br/>
+           <p>${form["Buy Now Price"].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</p>
+           <h3 className="underline">Sell Now Entered:</h3>
+           <p>${form["Sell Now Price"].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</p>
+           </div>
+         <h3 className="title-padding-top">Money Lost (Based on buy/sell prices above)</h3>
+         <div className="border-bottom"></div>
          <p className="losing-header">{"Losing: " + '$' + Math.abs(buySellDifference).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</p>
-         <h3>Recommendation</h3>
+         <h3 className="title-padding-top">Recommendation</h3>
+         <div className="border-bottom"></div>
          <p className="losing-header">{"DON'T buy at current inputted price of " + '$' + buyPrice.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</p>
          </div>
+         <h2 className="update-info-title">Did you buy the card? Enter details of purchase here to update!</h2>
+         <form className="form-styling" onSubmit={(e) => onPostPurchaseSubmit(e)}>
+        <label className='buy-price'>
+          Final Purchased Price:
+          <input onChange={e =>onPostPurchaseChange(e)} type="integer" name="Final Purchased Price" />
+        </label>
+        <label className='sell-price'>
+          Final Sold Price:
+          <input onChange={e =>onPostPurchaseChange(e)}  type="integer" name="Final Sold Price" />
+          <input type="submit" value="Submit" />
+          </label>
+      </form>
          <button className="startOver-button" onClick={e =>startOver(e)}>Start Over</button>
        </div>
       )
@@ -169,20 +221,19 @@ axios.all([requestOne, requestTwo, requestThree]).then(axios.spread((...response
            <h1 className='border-bottom useful-title'>Useful Information:</h1>
          <div className = "making-container">
            <div className="entered-values-container">
-            
            <h3 className="underline">{isPurchased ? "Purchased Price" : "Buy Now Entered"}:</h3><br/>
            <p>${form["Buy Now Price"].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</p>
-           <h3 className="underline">Sell Now Entered:</h3>
+           <h3 className="underline">{isSold ? "Sold For Price" : "Sell Now Entered"}:</h3>
            <p>${form["Sell Now Price"].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</p>
            </div>
-         <h3>Money Made</h3>
+         <h3 className="title-padding-top">Money Made</h3>
          <p className="parentheses-text">(Based on buy/sell prices above)</p>
          <div className='border-bottom'></div>
          <p className="making-header">{"Making: " + '$' + Math.abs(buySellDifference).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</p>
-         <h3>Recommendation</h3>
+         <h3 className="title-padding-top" >Recommendation</h3>
          <div className='border-bottom'></div>
-         <p className="making-header">{"DO buy at current inputted price of " + '$' + buyPrice.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</p>
-         <h3 className="breakEven ">Break Even Price </h3>
+         <p className="making-header">{"BUY at current inputted price of " + '$' + buyPrice.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</p>
+         <h3 className="title-padding-top breakEven">Break Even Price </h3>
          <p className="parentheses-text">(at currently entered price DO NOT sell for less than price below)</p> 
          <div className='border-bottom'></div>
          <p className = "breakEven-price">{ "$" + breakEven.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') }</p>
@@ -207,7 +258,6 @@ axios.all([requestOne, requestTwo, requestThree]).then(axios.spread((...response
 
   // const nextPrevButton = (e) => {
   //   e.preventDefault()
-  //   console.log(pages)
   //   if(e.target.innerText === "Previous Page") {
   //     setPages(pages - 1)
   //   } else {
@@ -241,7 +291,8 @@ axios.all([requestOne, requestTwo, requestThree]).then(axios.spread((...response
       {areStatsOpen && (
         gainLossHeader(form["Buy Now Price"], form["Sell Now Price"])
       )}
-    {resData?.map((r,i) =>
+      <h1 className="main-title">MONEY MAKERS (Updated x seconds ago)</h1>
+    {profitOnly?.map((r,i) =>
       <div className='flex-container' key={i}>
         <img alt="baseball player card" className="card-image" src={r?.item.img}></img>
         <div className='card-info'>
