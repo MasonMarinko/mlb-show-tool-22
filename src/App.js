@@ -23,8 +23,6 @@ const App = () => {
     startCounting();
   },[])
 
-  console.log(refreshTime.elapsedTime)
-
   const gainLossCards = (buyPrice, sellPrice) => {
     const commissionSellPrice = buyPrice - (buyPrice * .10)
     const buySellDifference = commissionSellPrice - sellPrice
@@ -112,8 +110,6 @@ axios.all([requestOne, requestTwo, requestThree, requestFour, requestFive, reque
     const buySellDifference = commissionSellPrice - p.best_buy_price
     return ({...p, buySellDifference})
   }).sort((a, b) => b.buySellDifference - a.buySellDifference)) 
-  
-  console.log(profitOnly)
 
   const onFieldChange = (e) => {
     if (e.target.name === "Buy Now Price") {
@@ -215,11 +211,11 @@ axios.all([requestOne, requestTwo, requestThree, requestFour, requestFive, reque
          <form className="form-styling" onSubmit={(e) => onPostPurchaseSubmit(e)}>
         <label className='buy-price'>
           Final Purchased Price:
-          <input onChange={e =>onPostPurchaseChange(e)} type="integer" name="Final Purchased Price" />
+          <input onChange={e =>onPostPurchaseChange(e)} type="integer" name="Final Sold Price" />
         </label>
         <label className='sell-price'>
           Final Sold Price:
-          <input onChange={e =>onPostPurchaseChange(e)}  type="integer" name="Final Sold Price" />
+          <input onChange={e =>onPostPurchaseChange(e)}  type="integer" name="Final Purchased Price" />
           <input type="submit" value="Submit" />
           </label>
       </form>
@@ -232,9 +228,9 @@ axios.all([requestOne, requestTwo, requestThree, requestFour, requestFive, reque
            <h1 className='border-bottom useful-title'>Useful Information:</h1>
          <div className = "making-container">
            <div className="entered-values-container">
-           <h3 className="underline">{isPurchased ? "Purchased Price" : "Buy Now Entered"}:</h3><br/>
+           <h3 className="underline">{isPurchased ? "Sold For Price" : "Buy Now Entered"}:</h3><br/>
            <p>${form["Buy Now Price"].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</p>
-           <h3 className="underline">{isSold ? "Sold For Price" : "Sell Now Entered"}:</h3>
+           <h3 className="underline">{isSold ? "Purchased Price" : "Sell Now Entered"}:</h3>
            <p>${form["Sell Now Price"].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</p>
            </div>
          <h3 className="title-padding-top">Money Made</h3>
@@ -253,11 +249,11 @@ axios.all([requestOne, requestTwo, requestThree, requestFour, requestFive, reque
          <form className="form-styling" onSubmit={(e) => onPostPurchaseSubmit(e)}>
         <label className='buy-price'>
           Final Purchased Price:
-          <input onChange={e =>onPostPurchaseChange(e)} type="integer" name="Final Purchased Price" />
+          <input onChange={e =>onPostPurchaseChange(e)} type="integer" name="Final Sold Price" />
         </label>
         <label className='sell-price'>
           Final Sold Price:
-          <input onChange={e =>onPostPurchaseChange(e)}  type="integer" name="Final Sold Price" />
+          <input onChange={e =>onPostPurchaseChange(e)}  type="integer" name="Final Purchased Price" />
           <input type="submit" value="Submit" />
           </label>
       </form>
