@@ -289,8 +289,11 @@ axios.all([requestOne, requestTwo, requestThree, requestFour, requestFive, reque
       {areStatsOpen && (
         gainLossHeader(form["Buy Now Price"], form["Sell Now Price"])
       )}
-      <h1 className="main-title">CARDS WITH OVER $1000 FLIP VALUE <span className="timer-data">(Results as of {refreshTime.elapsedTime} second/s ago)</span></h1>
+      <h1 className="main-title">CARDS WITH OVER $1000 FLIP VALUE</h1>
       <h2 className='secondary-title'>{refreshTime.elapsedTime >= 60 && "CARD DATA OVER 1 MINUTE OLD, PLEASE CONSIDER REFRESHING PAGE"}</h2>
+      <div className='refresh-button-container'>
+      {refreshTime.elapsedTime >= 60 && <button className="refresh-button" onClick={e => window.location.reload()}>REFRESH</button>}
+      </div>
     {profitOnly?.map((r,i) =>
       <div className='flex-container' key={i}>
         <img alt="baseball player card" className="card-image" src={r?.item.img}></img>
